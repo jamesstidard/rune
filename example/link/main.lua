@@ -1,3 +1,4 @@
+---@diagnostic disable: duplicate-set-field
 require("components.*")
 require("systems.*")
 
