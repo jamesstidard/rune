@@ -25,15 +25,12 @@ function love.load()
     world.ctx.window = {width=WIDTH, height=HEIGHT}
 
     -- register systems
-    world.add_system(AI, "update")
-    world.add_system(Casting, "update")
     world.add_system(Controller, "update")
     world.add_system(Hit, "update")
     world.add_system(Lifetimes, "update")
     world.add_system(Physics, "update")
     world.add_system(Rendering, "draw")
     world.add_system(Timing, "update")
-    world.add_system(Waves, "update")
 
     -- load player entity
     local player_entity = {
@@ -47,13 +44,6 @@ function love.load()
         HP(100),
     }
     local player_uid = world.add_entity(player_entity)
-
-    -- add initial weapon
-    local weapon_entity = {
-        Parent(player_uid),
-        Spell(0.5),
-    }
-    world.add_entity(weapon_entity)
 
     local world_clock = {
         Duration(0)
