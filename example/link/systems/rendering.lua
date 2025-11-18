@@ -6,7 +6,7 @@ Rendering = {}
 
 
 Rendering.filter = ecs.And{
-    ecs.Xor{"rectangle", "circle"},
+    ecs.Xor{"rectangle", "circle", "sprite"},
     ecs.Optional("position"),
     ecs.Optional("rotation"),
     ecs.Optional("scale"),
@@ -57,6 +57,19 @@ function Rendering.run(world, entities)
             love.graphics.translate(position.x, position.y)
             love.graphics.rotate(math.rad(rotation.degrees))
             love.graphics.circle(mode, radius/2, radius/2, radius)
+            love.graphics.pop()
+        elseif entity.sprite ~= nil then
+            local sprite = entity.sprite
+            local width = sprite.width * scale.fraction
+            local height = sprite.height * scale.fraction
+            love.graphics.push()
+            love.graphics.translate(position.x, position.y)
+            love.graphics.rotate(math.rad(rotation.degrees))
+            if sprite.quad then
+                love.graphics.draw(sprite.image, sprite.quad, -width/2, -height/2, 0, scale.fraction, scale.fraction)
+            else
+                love.graphics.draw(sprite.image, -width/2, -height/2, 0, scale.fraction, scale.fraction)
+            end
             love.graphics.pop()
         else
             assert(false, "unhandled entity")

@@ -34,7 +34,7 @@ function love.load()
 
     -- load player entity
     local player_entity = {
-        Circle("fill", 5),
+        Sprite("assets/link.png", 32, 32, {x=24*0, y=32*2, width=24, height=32}),
         Hitbox("circle", nil, nil, 5),
         Color(255, 255, 255, 1),
         Position(world.ctx.window.width/2, world.ctx.window.height/2),
