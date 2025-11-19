@@ -6,7 +6,7 @@ Controller = {}
 
 
 Controller.filter = {
-    players=ecs.And{"control", "position", "speed", ecs.Optional("direction")},
+    players=ecs.And{"control", "position", "speed", ecs.Optional("direction"), ecs.Optional("walking")},
     collidables=ecs.And{"hitbox", "collidable"}
 }
 
@@ -42,12 +42,21 @@ function Controller.run(world, entities, dt)
         end
 
         -- set sprite direction
+        local dx = x - entity.position.x
+        local dy = y - entity.position.y
+
         if entity.direction ~= nil then
-            local dx = x - entity.position.x
-            local dy = y - entity.position.y
             entity.direction.degrees = math.deg(math.atan2(dy, dx))
         end
 
+        -- for tracking
+        if dx ~= 0 or dy ~= 0 then
+            world.add_component(euid, Walking())
+        elseif entity.walking ~= nil then
+            world.remove_component(euid, entity.walking)
+        end
+
+        -- update new position
         entity.position.x = x
         entity.position.y = y
     end

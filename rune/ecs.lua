@@ -159,7 +159,7 @@ function Public.World()
 
     local function add_component(entity_or_uid, component)
         -- TODO:
-        -- do entities loojup inside function wrapper to handle case where
+        -- do entities lookup inside function wrapper to handle case where
         -- add_component is used on same tick as the entity was added.
         local entity = entity_or_uid
         if type(entity_or_uid) ~= "table" then
@@ -167,6 +167,19 @@ function Public.World()
             entity = entities[uid]
         end
         table.insert(promised_changes, utils.prime(utils.keyinsert, {entity, component.name, component}))
+    end
+
+    local function remove_component(entity_or_uid, component)
+        -- TODO:
+        -- do entities lookup inside function wrapper to handle case where
+        -- add_component is used on same tick as the entity was added.
+        -- or what if the entity is deleted on the same tick as the component.
+        local entity = entity_or_uid
+        if type(entity_or_uid) ~= "table" then
+            local uid = entity_or_uid
+            entity = entities[uid]
+        end
+        table.insert(promised_changes, utils.prime(utils.keydelete, {entity, component.name}))
     end
 
     local function children(entity_or_uid)
@@ -191,6 +204,7 @@ function Public.World()
         add_entities=add_entities,
         remove_entity=remove_entity,
         add_component=add_component,
+        remove_component=remove_component,
         entities=entities,
         systems=systems,
         children=children,
