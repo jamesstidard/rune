@@ -6,7 +6,7 @@ Controller = {}
 
 
 Controller.filter = {
-    players=ecs.And{"control", "position", "speed"},
+    players=ecs.And{"control", "position", "speed", ecs.Optional("direction")},
     collidables=ecs.And{"hitbox", "collidable"}
 }
 
@@ -39,6 +39,13 @@ function Controller.run(world, entities, dt)
                 -- oh, we've hit something... lets call it quits
                 return
             end
+        end
+
+        -- set sprite direction
+        if entity.direction ~= nil then
+            local dx = x - entity.position.x
+            local dy = y - entity.position.y
+            entity.direction.degrees = math.deg(math.atan2(dy, dx))
         end
 
         entity.position.x = x
