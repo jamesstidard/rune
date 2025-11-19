@@ -34,7 +34,20 @@ function love.load()
 
     -- load player entity
     local player_entity = {
-        Sprite("assets/link.png", 32, 32, {x=24*0, y=32*2, width=24, height=32}),
+        Sprite(
+            "assets/link.png",
+            {width=24, height=32},  -- width and height of a single sprite in the sheet. this should be a multiple of the actual width and height of the entire png
+            {
+                face_up=1,  -- single static sprite, the 65th sprite counting from
+                face_down=28,
+                face_left=37,
+                face_right=13,
+                walk_up={fps=10, frames={5, 6, 5, 57, 58, 57}},
+                walk_down={fps=10, frames={25, 82, 25, 76, 31, 76}},
+                walk_left={fps=10, frames={40, 43, 40, 85, 93, 85}},
+                walk_right={fps=10, frames={16, 19, 16, 67, 70, 67}},
+            }
+        ),
         Hitbox("circle", nil, nil, 5),
         Color(255, 255, 255, 1),
         Position(world.ctx.window.width/2, world.ctx.window.height/2),

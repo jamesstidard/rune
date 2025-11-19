@@ -60,16 +60,33 @@ function Rendering.run(world, entities)
             love.graphics.pop()
         elseif entity.sprite ~= nil then
             local sprite = entity.sprite
-            local width = sprite.width * scale.fraction
-            local height = sprite.height * scale.fraction
+            local width = sprite.width
+            local height = sprite.height
+
+            local state_data = sprite.states[sprite.current_state]
+            local frame_duration = state_data.duration
+            local quads = state_data.quads
+
+            local quad = nil
+            if frame_duration == 0 then
+                quad = quads[1]
+            else
+                -- TODO: AI generated. proof read. dt needs to be in update, not render
+                local dt = 0.01
+                sprite.time_elapsed = sprite.time_elapsed + dt
+                local frame_count = #quads
+
+                if sprite.time_elapsed >= frame_duration then
+                    sprite.time_elapsed = sprite.time_elapsed - frame_duration
+                    sprite.current_frame = (sprite.current_frame % frame_count) + 1
+                end
+                quad = quads[sprite.current_frame]
+            end
+
             love.graphics.push()
             love.graphics.translate(position.x, position.y)
             love.graphics.rotate(math.rad(rotation.degrees))
-            if sprite.quad then
-                love.graphics.draw(sprite.image, sprite.quad, -width/2, -height/2, 0, scale.fraction, scale.fraction)
-            else
-                love.graphics.draw(sprite.image, -width/2, -height/2, 0, scale.fraction, scale.fraction)
-            end
+            love.graphics.draw(sprite.image, quad, 0, 0, 0, scale.fraction, scale.fraction, width/2, height/2)
             love.graphics.pop()
         else
             assert(false, "unhandled entity")

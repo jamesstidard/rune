@@ -6,7 +6,7 @@ Controller = {}
 
 
 Controller.filter = {
-    players=ecs.And{"control", "position", "speed", ecs.Optional("direction"), ecs.Optional("walking")},
+    players=ecs.And{"control", "position", "speed"},
     collidables=ecs.And{"hitbox", "collidable"}
 }
 
@@ -41,19 +41,32 @@ function Controller.run(world, entities, dt)
             end
         end
 
-        -- set sprite direction
+        -- set sprite state
         local dx = x - entity.position.x
         local dy = y - entity.position.y
 
-        if entity.direction ~= nil then
-            entity.direction.degrees = math.deg(math.atan2(dy, dx))
-        end
+        local idle = dx == 0 and dy == 0
+        local degrees = (math.deg(math.atan2(dy, dx)) + 90) % 360  -- TODO: this works, but probably a better way to write. x=0,y=0 is top left of screen. 0deg should be top of screen direction.
 
-        -- for tracking
-        if dx ~= 0 or dy ~= 0 then
-            world.add_component(euid, Walking())
-        elseif entity.walking ~= nil then
-            world.remove_component(euid, entity.walking)
+        if entity.sprite ~= nil then
+            local last_state = entity.sprite.current_state
+            if idle == true and last_state == "walk_up" then
+                entity.sprite.current_state = "face_up"
+            elseif idle == true and last_state == "walk_down" then
+                entity.sprite.current_state = "face_down"
+            elseif idle == true and last_state == "walk_left" then
+                entity.sprite.current_state = "face_left"
+            elseif idle == true and last_state == "walk_right" then
+                entity.sprite.current_state = "face_right"
+            elseif idle == false and (degrees < 90 or degrees > 270) then
+                entity.sprite.current_state = "walk_up"
+            elseif idle == false and (degrees > 90 and degrees < 270) then
+                entity.sprite.current_state = "walk_down"
+            elseif idle == false and degrees == 270 then
+                entity.sprite.current_state = "walk_left"
+            elseif idle == false and degrees == 90 then
+                entity.sprite.current_state = "walk_right"
+            end
         end
 
         -- update new position
