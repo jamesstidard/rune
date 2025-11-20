@@ -29,6 +29,7 @@ function love.load()
     world.add_system(Hit, "update")
     world.add_system(Lifetimes, "update")
     world.add_system(Physics, "update")
+    world.add_system(Animation, "update")
     world.add_system(Rendering, "draw")
     world.add_system(Timing, "update")
 
