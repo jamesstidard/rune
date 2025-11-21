@@ -62,8 +62,8 @@ function Rendering.run(world, entities)
             local sprite = entity.sprite
             local width = sprite.width
             local height = sprite.height
-            local state_data = sprite.states[sprite.current_state]
-            local quad = state_data.quads[sprite.current_frame]
+            local state = sprite.states[sprite.current_state]
+            local quad = state.quads[sprite.current_frame]
             love.graphics.push()
             love.graphics.translate(position.x, position.y)
             love.graphics.rotate(math.rad(rotation.degrees))

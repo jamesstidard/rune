@@ -6,8 +6,16 @@ Controller = {}
 
 
 Controller.filter = {
-    players=ecs.And{"control", "position", "speed"},
-    collidables=ecs.And{"hitbox", "collidable"}
+    players=ecs.And{
+        "control",
+        "position",
+        "speed",
+        ecs.Optional{"direction", "rotation"},
+    },
+    collidables=ecs.And{
+        "hitbox",
+        "collidable",
+    }
 }
 
 
@@ -47,6 +55,9 @@ function Controller.run(world, entities, dt)
 
         local idle = dx == 0 and dy == 0
         local degrees = (math.deg(math.atan2(dy, dx)) + 90) % 360  -- TODO: this works, but probably a better way to write. x=0,y=0 is top left of screen. 0deg should be top of screen direction.
+        if entity.direction then
+            entity.direction.degrees = degrees
+        end
 
         if entity.sprite ~= nil then
             local last_state = entity.sprite.current_state
@@ -66,6 +77,17 @@ function Controller.run(world, entities, dt)
                 entity.sprite.current_state = "walk_left"
             elseif idle == false and degrees == 90 then
                 entity.sprite.current_state = "walk_right"
+            end
+        end
+
+        -- sprite rotation to align sprite when walking diagonally
+        if entity.rotation ~= nil then
+            if degrees > 270 or degrees < 90 then
+                entity.rotation.degrees = degrees
+            elseif degrees == 270 or degrees == 90 then
+                entity.rotation.degrees = 0
+            elseif degrees < 270 and degrees > 90 then
+                entity.rotation.degrees = degrees - 180
             end
         end
 

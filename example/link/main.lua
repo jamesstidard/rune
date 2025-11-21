@@ -49,6 +49,8 @@ function love.load()
                 walk_right={fps=10, frames={16, 19, 16, 67, 70, 67}},
             }
         ),
+        Direction(0),  -- face direction
+        Rotation(0),  -- sprite rotation
         Hitbox("circle", nil, nil, 5),
         Color(255, 255, 255, 1),
         Position(world.ctx.window.width/2, world.ctx.window.height/2),

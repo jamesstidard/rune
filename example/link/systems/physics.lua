@@ -9,6 +9,7 @@ Physics.filter = ecs.And{
     "direction",
     "position",
     "speed",
+    ecs.Not("control"),
 }
 
 
