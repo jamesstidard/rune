@@ -55,7 +55,7 @@ function Controller.run(world, entities, dt)
 
         local idle = dx == 0 and dy == 0
         local degrees = (math.deg(math.atan2(dy, dx)) + 90) % 360  -- TODO: this works, but probably a better way to write. x=0,y=0 is top left of screen. 0deg should be top of screen direction.
-        if entity.direction then
+        if entity.direction ~= nil then
             entity.direction.degrees = degrees
         end
 
