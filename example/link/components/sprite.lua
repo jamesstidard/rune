@@ -2,9 +2,7 @@
 -- @param image_path path to the image file (relative to love2d project root)
 -- @param frame_size table with frame dimensions {width, height} or single number for both width and height
 -- @param states optional table of animation states { state_name = frame_index or {fps=10, frames={1,2,3}} }
-function Sprite(image_path, frame_size, states)
-    local image = love.graphics.newImage(image_path)
-
+function Sprite(image, frame_size, states)
     -- Handle frame_size as number or table
     local frame_width, frame_height
     if type(frame_size) == "number" then

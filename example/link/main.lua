@@ -13,6 +13,9 @@ local HEIGHT = 32*16
 local ecs = require("rune.ecs")
 local world = nil
 
+local link_image = love.graphics.newImage("assets/link.png")
+local ground_image = love.graphics.newImage("assets/ground.png")
+
 
 function love.load()
     love.window.setMode(WIDTH, HEIGHT)
@@ -36,7 +39,7 @@ function love.load()
     -- load player entity
     local player_entity = {
         Sprite(
-            "assets/link.png",
+            link_image,
             {width=24, height=32},  -- width and height of a single sprite in the sheet. this should be a multiple of the actual width and height of the entire png
             {
                 face_up=1,  -- single static sprite, the 65th sprite counting from
